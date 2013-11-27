@@ -6,10 +6,10 @@ require 'test_construct/version'
 Gem::Specification.new do |spec|
   spec.name          = "test_construct"
   spec.version       = TestConstruct::VERSION
-  spec.authors       = ["Ben Brinckerhoff"]
-  spec.email         = ["ben@bbrinck.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.authors       = ["Ben Brinckerhoff", "Avdi Grimm"]
+  spec.email         = ["ben@bbrinck.com", "avdi@avdi.org"]
+  spec.description   = %q{Creates temporary files and directories for testing.}
+  spec.summary       = %q{Creates temporary files and directories for testing.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
