@@ -2,12 +2,9 @@ require "bundler/gem_tasks"
 require "rake/testtask"
 
 Rake::TestTask.new do |t|
-  t.libs << "spec"
+  t.libs << "test"
   t.libs << "lib"
-  t.pattern = "spec/**/*_spec.rb"
+  t.pattern = "test/**/*_test.rb"
 end
-
-# "Alias" the spec task by depending on the test task
-task :spec => :test
 
 task :default => [:test]
