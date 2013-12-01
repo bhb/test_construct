@@ -29,6 +29,32 @@ class TestConstructTest < Minitest::Test
       end
     end
 
+    test 'should yield to its block' do
+      sensor = 'no yield'
+      within_construct do
+        sensor = 'yielded'
+      end
+      assert_equal 'yielded', sensor
+    end
+
+    test 'block argument should be container directory Pathname' do
+      num = rand(1_000_000_000)
+      self.stubs(:rand).returns(num)
+      within_construct do |container_path|
+        expected_path = (Pathname(TestConstruct.tmpdir) +
+          "construct_container-#{$PROCESS_ID}-#{num}")
+        assert_equal(expected_path, container_path)
+      end
+    end
+
+    test 'should not exist afterwards' do
+      path = nil
+      within_construct do |container_path|
+        path = container_path
+      end
+      assert !path.exist?
+    end
+
   end
 
 end

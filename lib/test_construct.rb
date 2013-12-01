@@ -2,6 +2,7 @@ require "tmpdir"
 
 require "test_construct/version"
 require "test_construct/helpers"
+require "test_construct/pathname_extensions"
 
 module TestConstruct
 
