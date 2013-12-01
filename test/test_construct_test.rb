@@ -21,7 +21,7 @@ class TestConstructTest < Minitest::Test
 
   testing 'creating a construct container' do
 
-    test 'should exist' do
+    test 'exists' do
       num = rand(1_000_000_000)
       self.stubs(:rand).returns(num)
       within_construct do |construct|
@@ -29,7 +29,7 @@ class TestConstructTest < Minitest::Test
       end
     end
 
-    test 'should yield to its block' do
+    test 'yields to its block' do
       sensor = 'no yield'
       within_construct do
         sensor = 'yielded'
@@ -37,7 +37,7 @@ class TestConstructTest < Minitest::Test
       assert_equal 'yielded', sensor
     end
 
-    test 'block argument should be container directory Pathname' do
+    test 'block argument is container directory Pathname' do
       num = rand(1_000_000_000)
       self.stubs(:rand).returns(num)
       within_construct do |container_path|
@@ -47,12 +47,44 @@ class TestConstructTest < Minitest::Test
       end
     end
 
-    test 'should not exist afterwards' do
+    test 'does not exist afterwards' do
       path = nil
       within_construct do |container_path|
         path = container_path
       end
       assert !path.exist?
+    end
+
+    test 'removes entire tree afterwards' do
+      path = nil
+      within_construct do |container_path|
+        path = container_path
+        (container_path + 'foo').mkdir
+      end
+      assert !path.exist?
+    end
+
+    test 'removes dir if block raises exception' do
+      path = nil
+      begin
+        within_construct do |container_path|
+          path = container_path
+          raise 'something bad happens here'
+        end
+      rescue
+      end
+      assert !path.exist?
+    end
+
+    test 'does not capture exceptions raised in block' do
+      err = RuntimeError.new('an error')
+      begin
+        within_construct do
+          raise err
+        end
+      rescue RuntimeError => e
+        assert_same err, e
+      end
     end
 
   end
