@@ -1,24 +1,23 @@
 module TestConstruct
 
   module Helpers
-    #include PathExtensions
     extend self
 
-    def within_construct(chdir=true)
+    def within_construct(chdir = true)
       container = create_construct(chdir)
-      #container.maybe_change_dir(chdir) do
+      container.maybe_change_dir(chdir) do
         yield(container)
-      #end
+      end
     ensure
       container.destroy! if container.respond_to?(:destroy!)
     end
 
-    def create_construct(chdir=true)
+    def create_construct(chdir = true)
       path = (Pathname(TestConstruct.tmpdir) +
         "#{CONTAINER_PREFIX}-#{$PROCESS_ID}-#{rand(1_000_000_000)}")
       path.mkpath
       path.extend(PathnameExtensions)
-      #path.construct__chdir_default = chdir
+      path.construct__chdir_default = chdir
       path
     end
 

@@ -10,7 +10,7 @@ module TestConstruct
 
   def self.tmpdir
     dir = nil
-    Dir.chdir Dir.tmpdir do dir = Dir.pwd end # HACK FOR OSX
+    Dir.chdir Dir.tmpdir do dir = Dir.pwd end # HACK FOR OS X
     dir
   end
 
