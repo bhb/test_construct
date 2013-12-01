@@ -149,7 +149,7 @@ Contents
       end
     end
 
-    test 'can write to File object passed to block' do
+    test 'writes to File object passed to block' do
       within_construct do |construct|
         construct.file('foo.txt') do |file|
           file << 'abc'
@@ -158,7 +158,7 @@ Contents
       end
     end
 
-    test 'file is closed after block ends' do
+    test 'closes file after block ends' do
       within_construct do |construct|
         construct_file = nil
         construct.file('foo.txt') do |file|
@@ -193,14 +193,14 @@ Contents
       end
     end
 
-    test 'can create file including path in one call' do
+    test 'creates file including path in one call' do
       within_construct do |construct|
         construct.file('foo/bar/baz.txt')
         assert (construct+'foo/bar/baz.txt').exist?
       end
     end
 
-    test 'can create file including path in one call when directories exists' do
+    test 'creates file including path in one call when directories exists' do
       within_construct do |construct|
         construct.directory('foo/bar')
         construct.file('foo/bar/baz.txt')
@@ -208,7 +208,7 @@ Contents
       end
     end
 
-    test 'can create file including path with chained calls' do
+    test 'creates file including path with chained calls' do
       within_construct do |construct|
         construct.directory('foo').directory('bar').file('baz.txt')
         assert (construct+'foo/bar/baz.txt').exist?
@@ -219,14 +219,14 @@ Contents
 
     testing 'creating a subdirectory in container' do
 
-    test 'should exist while in construct block' do
+    test 'exists while in construct block' do
       within_construct do |construct|
         construct.directory 'foo'
         assert (construct+'foo').directory?
       end
     end
 
-    test 'should not exist after construct block' do
+    test 'does not exist after construct block' do
       subdir = 'unset'
       within_construct do |construct|
         construct.directory 'foo'
@@ -259,14 +259,14 @@ Contents
       end
     end
 
-    test 'can create nested directory in one call' do
+    test 'creates nested directory in one call' do
       within_construct do |construct|
         construct.directory('foo/bar')
         assert (construct+'foo/bar').directory?
       end
     end
 
-    test 'can create a nested directory in two calls' do
+    test 'creates a nested directory in two calls' do
       within_construct do |construct|
         construct.directory('foo').directory('bar')
         assert (construct+'foo/bar').directory?
@@ -277,7 +277,7 @@ Contents
 
   testing "subdirectories changing the working directory" do
 
-    test 'can force directory stays the same' do
+    test 'forces directory stays the same' do
       within_construct do |construct|
         old_pwd = Dir.pwd
         construct.directory('foo',false) do
@@ -295,7 +295,7 @@ Contents
       end
     end
 
-    test 'can override construct default' do
+    test 'overrides construct default' do
       within_construct(false) do |construct|
         old_pwd = Dir.pwd
         construct.directory('foo', true) do |dir|
@@ -333,7 +333,7 @@ Contents
       end
     end
 
-    test 'should not capture exceptions raised in block' do
+    test 'captures exceptions raised in block' do
       within_construct do |construct|
         error = assert_raises RuntimeError do
           construct.directory('foo') do
@@ -366,7 +366,7 @@ Contents
 
   testing "changing the working directory" do
 
-    test 'can force directory stays the same' do
+    test 'forces directory stays the same' do
       old_pwd = Dir.pwd
       within_construct(false) do |construct|
         assert_equal old_pwd, Dir.pwd
@@ -397,7 +397,7 @@ Contents
       assert_equal old_pwd, Dir.pwd
     end
 
-    test 'should not capture exceptions raised in block' do
+    test 'does not capture exceptions raised in block' do
       error = assert_raises RuntimeError do
         within_construct do
           raise 'fail!'

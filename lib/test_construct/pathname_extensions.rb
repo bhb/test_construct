@@ -3,7 +3,7 @@ module TestConstruct
 
     attr_accessor :construct__chdir_default
 
-    def directory(path,chdir=construct__chdir_default)
+    def directory(path, chdir = construct__chdir_default)
       subdir = (self + path)
       subdir.mkpath
       subdir.extend(PathnameExtensions)
@@ -13,7 +13,7 @@ module TestConstruct
       subdir
     end
 
-    def file(filepath,contents=nil,&block)
+    def file(filepath, contents = nil, &block)
       path = (self+filepath)
       path.dirname.mkpath
       File.open(path,'w') do |f|
