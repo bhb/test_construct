@@ -12,9 +12,17 @@ class TestConstructTest < Minitest::Test
     test 'creates construct' do
       num = rand(1_000_000_000)
       TestConstruct.stubs(:rand).returns(num)
+      directory = false
       TestConstruct::within_construct do |construct|
-        assert File.directory?(File.join(TestConstruct.tmpdir, "construct_container-#{$PROCESS_ID}-#{num}"))
+        directory = File.directory?(File.join(TestConstruct.tmpdir, "construct_container-#{$PROCESS_ID}-#{num}"))
       end
+      assert directory
+
+      directory = false
+      TestConstruct.within_construct do |construct|
+        directory = File.directory?(File.join(TestConstruct.tmpdir, "construct_container-#{$PROCESS_ID}-#{num}"))
+      end
+      assert directory
     end
 
   end
