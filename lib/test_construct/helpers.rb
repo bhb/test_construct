@@ -3,7 +3,8 @@ module TestConstruct
   module Helpers
     extend self
 
-    def within_construct(chdir = true)
+    def within_construct(opts = {})
+      chdir = opts.fetch(:chdir, true)
       container = create_construct(chdir)
       container.maybe_change_dir(chdir) do
         yield(container)

@@ -288,14 +288,14 @@ Contents
     test 'forces directory stays the same' do
       within_construct do |construct|
         old_pwd = Dir.pwd
-        construct.directory('foo',false) do
+        construct.directory('foo', :chdir => false) do
           assert_equal old_pwd, Dir.pwd
         end
       end
     end
 
     test 'defaults chdir setting from construct' do
-      within_construct(false) do |construct|
+      within_construct(:chdir => false) do |construct|
         old_pwd = Dir.pwd
         construct.directory('foo') do
           assert_equal old_pwd, Dir.pwd
@@ -304,9 +304,9 @@ Contents
     end
 
     test 'overrides construct default' do
-      within_construct(false) do |construct|
+      within_construct(:chdir => false) do |construct|
         old_pwd = Dir.pwd
-        construct.directory('foo', true) do |dir|
+        construct.directory('foo', :chdir => true) do |dir|
           assert_equal dir.to_s, Dir.pwd
         end
       end
@@ -376,7 +376,7 @@ Contents
 
     test 'forces directory stays the same' do
       old_pwd = Dir.pwd
-      within_construct(false) do |construct|
+      within_construct(:chdir => false) do |construct|
         assert_equal old_pwd, Dir.pwd
       end
     end

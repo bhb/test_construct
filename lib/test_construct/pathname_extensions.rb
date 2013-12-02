@@ -3,7 +3,8 @@ module TestConstruct
 
     attr_accessor :construct__chdir_default
 
-    def directory(path, chdir = construct__chdir_default)
+    def directory(path, opts = {})
+      chdir = opts.fetch(:chdir, construct__chdir_default)
       subdir = (self + path)
       subdir.mkpath
       subdir.extend(PathnameExtensions)
