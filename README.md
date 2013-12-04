@@ -107,6 +107,7 @@ Again, note that the working directory is automatically changed while in the blo
 
 Again, you can provide paths and the necessary directories will be automatically created:
 
+
     within_construct do |construct|
       construct.directory('foo/bar/') do |dir|
         dir.directory('baz')
@@ -115,6 +116,32 @@ Again, you can provide paths and the necessary directories will be automatically
     end
 
 Please read test/construct_test.rb for more examples.
+
+### Disabling chdir
+
+In some cases, you may wish to disable the default behavior of automatically changing the current directory. For example, changing the current directory will prevent Ruby debuggers from displaying source code correctly.
+
+If you disable, automatic chdir, note that your old assertions will not work:
+
+```
+within_construct(:chdir => false) do |construct|
+  construct.file("foo.txt")
+  # Fails. foo.txt was created in construct, but 
+  # the current directory is not the construct!
+  assert File.exists?("foo.txt")
+end
+```
+
+To fix, simply use the `Pathname` passed to the block:
+
+```
+within_construct(:chdir => false) do |construct|
+  construct.file("foo.txt")
+  # Passes
+  assert File.exists?(construct+"foo.txt")
+end
+```
+
 
 ## Contributing
 
