@@ -13,26 +13,12 @@ class Minitest::Test
   end
 
   def self.test(name, &block)
-    name.extend(Squish)
-    test_name = @group ? "test_: #{@group}: #{name.squish}".to_sym : "test_: #{name.squish}".to_sym
-    defined = instance_method(test_name) rescue false
+    name = name.strip.gsub(/\s\s+/, " ")
+    group = "#{@group}: " if @group
+    test_name = "test_: #{group}#{name}".to_sym
+    defined = instance_methods.include? test_name
     raise "#{test_name} is already defined in #{self}" if defined
     define_method(test_name, &block)
-  end
-
-end
-
-module Squish
-
-  def squish
-    dup.extend(Squish).squish!
-  end
-
-  # Performs a destructive squish. See String#squish.
-  def squish!
-    strip!
-    gsub!(/\s+/, ' ')
-    self
   end
 
 end
