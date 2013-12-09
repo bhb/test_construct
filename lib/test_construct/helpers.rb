@@ -12,10 +12,14 @@ module TestConstruct
       container.maybe_change_dir(chdir) do
         yield(container)
       end
-    ensure
-      if keep_on_error && $ERROR_INFO
+    rescue Exception => error
+      if keep_on_error
         container.keep
+        raise error, "#{error.message}\nTestConstruct files kept at: #{container}"
+      else
+        raise
       end
+    ensure
       container.finalize if container.respond_to?(:finalize)
     end
 

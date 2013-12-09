@@ -506,5 +506,18 @@ Contents
       end
       assert path.exist?
     end
+
+    test 'updates exception message to include location of files' do
+      path = nil
+      begin
+        within_construct(keep_on_error: true) do |container_path|
+          path = container_path
+          raise 'bad stuff'
+        end
+      rescue => e
+        error = e
+      end
+      assert_equal "bad stuff\nTestConstruct files kept at: #{path}", e.message
+    end
   end
 end
