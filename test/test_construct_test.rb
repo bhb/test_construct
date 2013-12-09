@@ -464,7 +464,6 @@ Contents
   end
 
   testing "#destroy!" do
-
     test "removes the construct container" do
       it = create_construct
       it.destroy!
@@ -472,4 +471,40 @@ Contents
     end
   end
 
+  testing "#finalize" do
+    test "removes the construct container" do
+      it = create_construct
+      it.finalize
+      assert !File.exist?(it.to_s)
+    end
+
+    test "leaves the container if keep is flagged" do
+      it = create_construct
+      it.keep
+      it.finalize
+      assert File.exist?(it.to_s)
+    end
+
+    test "leaves the container if keep is flagged in a subdir" do
+      it = create_construct
+      subdir = it.directory "subdir"
+      subdir.keep
+      it.finalize
+      assert File.exist?(it.to_s)
+    end
+  end
+
+  testing "keep_on_error = true" do
+    test 'keeps dir when block raises exception' do
+      path = nil
+      begin
+        within_construct(keep_on_error: true) do |container_path|
+          path = container_path
+          raise 'something bad happens here'
+        end
+      rescue
+      end
+      assert path.exist?
+    end
+  end
 end

@@ -1,13 +1,13 @@
 module TestConstruct
   module PathnameExtensions
 
-    attr_accessor :construct__chdir_default
-
+    attr_accessor :construct__chdir_default, :construct__root
     def directory(path, opts = {})
       chdir = opts.fetch(:chdir, construct__chdir_default)
       subdir = (self + path)
       subdir.mkpath
       subdir.extend(PathnameExtensions)
+      subdir.construct__root = construct__root || self
       subdir.maybe_change_dir(chdir) do
         yield(subdir) if block_given?
       end
@@ -47,6 +47,22 @@ module TestConstruct
 
     def destroy!
       rmtree
+    end
+
+    def finalize
+      destroy! unless keep?
+    end
+
+    def keep
+      if construct__root
+        construct__root.keep
+      else
+        @keep = true
+      end
+    end
+
+    def keep?
+      defined?(@keep) && @keep
     end
 
   end
