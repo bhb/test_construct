@@ -29,7 +29,11 @@ module TestConstruct
              else opts.merge(chdir: chdir_or_opts)
              end
       base_path = Pathname(opts.fetch(:base_dir) { TestConstruct.tmpdir })
-      path = base_path + "#{CONTAINER_PREFIX}-#{$PROCESS_ID}-#{rand(1_000_000_000)}"
+      name      = opts.fetch(:name, "")
+      slug      = name.downcase.tr_s("^a-z0-9", "-")
+      dir = "#{CONTAINER_PREFIX}-#{$PROCESS_ID}-#{rand(1_000_000_000)}"
+      dir << slug unless slug.empty?
+      path = base_path + dir
       path.mkpath
       path.extend(PathnameExtensions)
       path.construct__chdir_default = opts.fetch(:chdir, true)

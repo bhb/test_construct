@@ -529,4 +529,12 @@ Contents
       end
     end
   end
+
+  testing 'name option' do
+    test 'used in generation of the directory name' do
+      within_construct(name: "My best test ever!") do |container|
+        assert_match /my-best-test-ever-$/, container.basename.to_s
+      end
+    end
+  end
 end
