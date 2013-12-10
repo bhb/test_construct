@@ -520,4 +520,13 @@ Contents
       assert_equal "bad stuff\nTestConstruct files kept at: #{path}", e.message
     end
   end
+
+  testing 'base_dir option' do
+    test 'determines the location of construct dirs' do
+      base_dir = File.expand_path("../temp", __FILE__)
+      within_construct(base_dir: base_dir) do |container|
+        assert_equal base_dir, container.dirname.to_s
+      end
+    end
+  end
 end

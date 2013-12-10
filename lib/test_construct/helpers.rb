@@ -7,8 +7,8 @@ module TestConstruct
 
     def within_construct(opts = {})
       chdir         = opts.fetch(:chdir, true)
-      keep_on_error = opts.fetch(:keep_on_error, false)
-      container = create_construct(chdir)
+      keep_on_error = opts.delete(:keep_on_error) { false }
+      container = create_construct(opts)
       container.maybe_change_dir(chdir) do
         yield(container)
       end
@@ -23,12 +23,16 @@ module TestConstruct
       container.finalize if container.respond_to?(:finalize)
     end
 
-    def create_construct(chdir = true)
-      path = (Pathname(TestConstruct.tmpdir) +
-        "#{CONTAINER_PREFIX}-#{$PROCESS_ID}-#{rand(1_000_000_000)}")
+    def create_construct(chdir_or_opts = true, opts={})
+      opts = case chdir_or_opts
+             when Hash then chdir_or_opts
+             else opts.merge(chdir: chdir_or_opts)
+             end
+      base_path = Pathname(opts.fetch(:base_dir) { TestConstruct.tmpdir })
+      path = base_path + "#{CONTAINER_PREFIX}-#{$PROCESS_ID}-#{rand(1_000_000_000)}"
       path.mkpath
       path.extend(PathnameExtensions)
-      path.construct__chdir_default = chdir
+      path.construct__chdir_default = opts.fetch(:chdir, true)
       path
     end
 
