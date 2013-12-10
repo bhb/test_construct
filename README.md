@@ -142,6 +142,51 @@ within_construct(:chdir => false) do |construct|
 end
 ```
 
+### Keeping directories around
+
+You may find it convenient to keep the created directory around after a test has completed, in order to manually inspect its contents.
+
+```ruby
+within_construct do |construct|
+  # ...
+  construct.keep
+end
+```
+
+Most likely you only want the directory to stick around if something goes wrong. To do this, use the `:keep_on_error` option.
+
+```ruby
+within_construct(keep_on_error: true) do |construct|
+  # ...
+  raise "some error"
+end
+```
+
+TestConstruct will also annotate the exception error message to tell you where the generated files can be found.
+
+### Setting the base directory
+
+By default, TestConstruct puts its temporary container directories in your system temp dir. You can change this with the `:base_dir` option:
+
+```ruby
+tmp_dir = File.expand_path("../../tmp", __FILE__)
+within_construct(base_dir: tmp_dir) do |construct|
+  construct.file("foo.txt")
+  # Passes
+  assert File.exists?(construct+"foo.txt")
+end
+```
+
+### Naming the created directories
+
+Normally TestConstruct names the container directories it creates using a combination of a `test-construct-` prefix, the current process ID, and a random number. This ensures that the name is unlikely to clash with directories left over from previous runs. However, it isn't very meaningful. You can optionally make the directory names more recognizable by specifying a `:name` option. TestConstruct will take the string passed, turn it into a normalized "slug" without any funny characters, and append it to the end of the generated dirname.
+
+```ruby
+within_construct(name: "My best test ever!") do |construct|
+  # will generate something like:
+  # /tmp/construct-container-1234-5678-my-best-test-ever
+end
+```
 
 ## Contributing
 
