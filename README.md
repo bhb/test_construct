@@ -188,6 +188,44 @@ within_construct(name: "My best test ever!") do |construct|
 end
 ```
 
+### RSpec Integration
+
+TestConstruct comes with RSpec integration. Just require the `test_construct/rspec_integration` file in your `spec_helper.rb` or in your spec file. Then tag the tests you want to execute in the context of a construct container with `test_construct: true` using RSpec metadata:
+
+```ruby
+require "test_construct/rspec_integration"
+
+describe Foo, test_construct: true do
+  # ...
+end
+```
+
+By default the current working directory will be switched to the construct container within tests; the container name will be derived from the name of the current example; and if a test fails, the container will be kept around. Information about where to find it will be added to the test failure message.
+
+You can tweak any TestConstruct options by passing a hash as the value of the `:test_construct` metadata key.
+
+```ruby
+require "test_construct/rspec_integration"
+
+describe Foo, test_construct: {keep_on_error: false} do
+  # ...
+end
+```
+
+If you want access to the construct container, currently the only way to get it is to grab it from the example metadata:
+
+```ruby
+require "test_construct/rspec_integration"
+
+describe Foo, test_construct: true do
+  it "should do stuff" do |example|
+    example[:construct_container].file "somefile"
+    example[:construct_container].directory "somedir"
+    # ...
+  end
+end
+```
+
 ## Contributing
 
 1. Fork it

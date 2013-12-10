@@ -4,6 +4,7 @@ class TestConstructTest < Minitest::Test
   include TestConstruct::Helpers
 
   def teardown
+    Dir.chdir File.expand_path("../..", __FILE__)
     TestConstruct.destroy_all!
   end
 

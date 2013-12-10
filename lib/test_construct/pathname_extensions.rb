@@ -1,7 +1,7 @@
 module TestConstruct
   module PathnameExtensions
 
-    attr_accessor :construct__chdir_default, :construct__root
+    attr_accessor :construct__chdir_default, :construct__root, :construct__orig_dir
     def directory(path, opts = {})
       chdir = opts.fetch(:chdir, construct__chdir_default)
       subdir = (self + path)
@@ -33,9 +33,16 @@ module TestConstruct
 
     def maybe_change_dir(chdir, &block)
       if(chdir)
+        self.construct__orig_dir ||= Pathname.pwd
         self.chdir(&block)
       else
-        block.call
+        block.call if block
+      end
+    end
+
+    def revert_cwd
+      if construct__orig_dir
+        Dir.chdir(construct__orig_dir)
       end
     end
 
@@ -50,6 +57,7 @@ module TestConstruct
     end
 
     def finalize
+      revert_cwd
       destroy! unless keep?
     end
 
@@ -65,5 +73,17 @@ module TestConstruct
       defined?(@keep) && @keep
     end
 
+    def annotate_exception(error)
+      error.exception("#{error.message}#{exception_message_annotation}")
+    end
+
+    def annotate_exception!(error)
+      error.message << exception_message_annotation
+      error
+    end
+
+    def exception_message_annotation
+      "\nTestConstruct files kept at: #{self}"
+    end
   end
 end
