@@ -219,8 +219,8 @@ require "test_construct/rspec_integration"
 
 describe Foo, test_construct: true do
   it "should do stuff" do |example|
-    example[:construct_container].file "somefile"
-    example[:construct_container].directory "somedir"
+    example[:construct].file "somefile"
+    example[:construct].directory "somedir"
     # ...
   end
 end
