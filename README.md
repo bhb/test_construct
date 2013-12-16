@@ -200,7 +200,7 @@ describe Foo, test_construct: true do
 end
 ```
 
-By default the current working directory will be switched to the construct container within tests; the container name will be derived from the name of the current example; and if a test fails, the container will be kept around. Information about where to find it will be added to the test failure message.
+By default, the current working directory will be switched to the construct container within tests; the container name will be derived from the name of the current example; and if a test fails, the container will be kept around. Information about where to find it will be added to the test failure message.
 
 You can tweak any TestConstruct options by passing a hash as the value of the `:test_construct` metadata key.
 
@@ -212,7 +212,7 @@ describe Foo, test_construct: {keep_on_error: false} do
 end
 ```
 
-If you want access to the construct container, currently the only way to get it is to grab it from the example metadata:
+If you want access to the construct container, grab it from the example metadata:
 
 ```ruby
 require "test_construct/rspec_integration"
