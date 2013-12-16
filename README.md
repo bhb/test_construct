@@ -173,7 +173,7 @@ tmp_dir = File.expand_path("../../tmp", __FILE__)
 within_construct(base_dir: tmp_dir) do |construct|
   construct.file("foo.txt")
   # Passes
-  assert File.exists?(construct+"foo.txt")
+  assert File.exists?(tmp_dir+"/foo.txt")
 end
 ```
 
