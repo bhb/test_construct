@@ -142,6 +142,89 @@ within_construct(:chdir => false) do |construct|
 end
 ```
 
+### Keeping directories around
+
+You may find it convenient to keep the created directory around after a test has completed, in order to manually inspect its contents.
+
+```ruby
+within_construct do |construct|
+  # ...
+  construct.keep
+end
+```
+
+Most likely you only want the directory to stick around if something goes wrong. To do this, use the `:keep_on_error` option.
+
+```ruby
+within_construct(keep_on_error: true) do |construct|
+  # ...
+  raise "some error"
+end
+```
+
+TestConstruct will also annotate the exception error message to tell you where the generated files can be found.
+
+### Setting the base directory
+
+By default, TestConstruct puts its temporary container directories in your system temp dir. You can change this with the `:base_dir` option:
+
+```ruby
+tmp_dir = File.expand_path("../../tmp", __FILE__)
+within_construct(base_dir: tmp_dir) do |construct|
+  construct.file("foo.txt")
+  # Passes
+  assert File.exists?(tmp_dir+"/foo.txt")
+end
+```
+
+### Naming the created directories
+
+Normally TestConstruct names the container directories it creates using a combination of a `test-construct-` prefix, the current process ID, and a random number. This ensures that the name is unlikely to clash with directories left over from previous runs. However, it isn't very meaningful. You can optionally make the directory names more recognizable by specifying a `:name` option. TestConstruct will take the string passed, turn it into a normalized "slug" without any funny characters, and append it to the end of the generated dirname.
+
+```ruby
+within_construct(name: "My best test ever!") do |construct|
+  # will generate something like:
+  # /tmp/construct-container-1234-5678-my-best-test-ever
+end
+```
+
+### RSpec Integration
+
+TestConstruct comes with RSpec integration. Just require the `test_construct/rspec_integration` file in your `spec_helper.rb` or in your spec file. Then tag the tests you want to execute in the context of a construct container with `test_construct: true` using RSpec metadata:
+
+```ruby
+require "test_construct/rspec_integration"
+
+describe Foo, test_construct: true do
+  # ...
+end
+```
+
+By default the current working directory will be switched to the construct container within tests; the container name will be derived from the name of the current example; and if a test fails, the container will be kept around. Information about where to find it will be added to the test failure message.
+
+You can tweak any TestConstruct options by passing a hash as the value of the `:test_construct` metadata key.
+
+```ruby
+require "test_construct/rspec_integration"
+
+describe Foo, test_construct: {keep_on_error: false} do
+  # ...
+end
+```
+
+If you want access to the construct container, currently the only way to get it is to grab it from the example metadata:
+
+```ruby
+require "test_construct/rspec_integration"
+
+describe Foo, test_construct: true do
+  it "should do stuff" do |example|
+    example[:construct].file "somefile"
+    example[:construct].directory "somedir"
+    # ...
+  end
+end
+```
 
 ## Contributing
 
