@@ -53,9 +53,9 @@ module TestConstruct
     end
 
     # THIS METHOD MAY HAVE EXTERNAL SIDE-EFFECTS, including:
-    # - Removind the container directory tree
+    # - removing the container directory tree
     # - changing the current working directory
-    # - Modifying any exception passed as `error`
+    # - modifying any exception passed as `error`
     #
     # It is intended to be paired with #setup_construct
     def teardown_construct(container, error=nil, opts={})
