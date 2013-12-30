@@ -1,4 +1,5 @@
 require 'English'
+require 'pathname'
 
 module TestConstruct
 
