@@ -46,7 +46,7 @@ module TestConstruct
     def setup_construct(opts={})
       opts          = opts.dup
       chdir         = opts.fetch(:chdir, true)
-      keep_on_error = opts.delete(:keep_on_error) { false }
+      opts.delete(:keep_on_error) { false } # not used in setup
       container = create_construct(opts)
       container.maybe_change_dir(chdir)
       container

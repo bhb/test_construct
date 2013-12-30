@@ -39,14 +39,14 @@ RSpec.configure do |config|
   config.before :each do |example|
     next unless test_construct_enabled?(example)
     options = test_construct_options(example)
-    example.metadata[:construct_container] = setup_construct(options)
+    example.metadata[:construct] = setup_construct(options)
   end
 
   config.after :each do |example|
     next unless test_construct_enabled?(example)
     options = test_construct_options(example)
     teardown_construct(
-      example.metadata[:construct_container],
+      example.metadata[:construct],
       example.exception,
       options)
   end
