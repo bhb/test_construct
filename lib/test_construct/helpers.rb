@@ -18,14 +18,10 @@ module TestConstruct
       teardown_construct(container, nil, opts)
     end
 
-    def create_construct(chdir_or_opts = true, opts={})
-      opts = case chdir_or_opts
-             when Hash then chdir_or_opts
-             else opts.merge(chdir: chdir_or_opts)
-             end
-      chdir_default = opts.delete(:chdir) {true}
+    def create_construct(opts={})
+      chdir_default = opts.delete(:chdir) { true }
       base_path     = Pathname(opts.delete(:base_dir) { TestConstruct.tmpdir })
-      name          = opts.delete(:name){""}
+      name          = opts.delete(:name) { "" }
       slug          = name.downcase.tr_s("^a-z0-9", "-")[0..63]
       if opts.any?
         raise "[TestConstruct] Unrecognized options: #{opts.keys}"

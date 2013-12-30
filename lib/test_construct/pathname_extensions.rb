@@ -73,10 +73,6 @@ module TestConstruct
       defined?(@keep) && @keep
     end
 
-    def annotate_exception(error)
-      error.exception("#{error.message}#{exception_message_annotation}")
-    end
-
     def annotate_exception!(error)
       error.message << exception_message_annotation
       error
