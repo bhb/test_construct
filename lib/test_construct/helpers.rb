@@ -17,7 +17,7 @@ module TestConstruct
       teardown_construct(container, nil, opts)
     end
 
-    def create_construct(opts={})
+    def create_construct(opts = {})
       chdir_default = opts.delete(:chdir) { true }
       base_path     = Pathname(opts.delete(:base_dir) { TestConstruct.tmpdir })
       name          = opts.delete(:name) { "" }
@@ -39,9 +39,9 @@ module TestConstruct
     # - changing the current working directory
     #
     # It is intended to be paired with #teardown_construct
-    def setup_construct(opts={})
-      opts          = opts.dup
-      chdir         = opts.fetch(:chdir, true)
+    def setup_construct(opts = {})
+      opts  = opts.dup
+      chdir = opts.fetch(:chdir, true)
       opts.delete(:keep_on_error) { false } # not used in setup
       container = create_construct(opts)
       container.maybe_change_dir(chdir)
@@ -54,7 +54,7 @@ module TestConstruct
     # - modifying any exception passed as `error`
     #
     # It is intended to be paired with #setup_construct
-    def teardown_construct(container, error=nil, opts={})
+    def teardown_construct(container, error = nil, opts = {})
       if error && opts[:keep_on_error]
         container.keep
         container.annotate_exception!(error)
