@@ -196,7 +196,11 @@ TestConstruct comes with RSpec integration. Just require the `test_construct/rsp
 require "test_construct/rspec_integration"
 
 describe Foo, test_construct: true do
-  # ...
+  it "should do stuff" do
+    example.metadata[:construct].file "somefile"
+    example.metadata[:construct].directory "somedir"
+    # ...
+  end
 end
 ```
 
@@ -209,20 +213,6 @@ require "test_construct/rspec_integration"
 
 describe Foo, test_construct: {keep_on_error: false} do
   # ...
-end
-```
-
-If you want access to the construct container, grab it from the example metadata:
-
-```ruby
-require "test_construct/rspec_integration"
-
-describe Foo, test_construct: true do
-  it "should do stuff" do |example|
-    example[:construct].file "somefile"
-    example[:construct].directory "somedir"
-    # ...
-  end
 end
 ```
 

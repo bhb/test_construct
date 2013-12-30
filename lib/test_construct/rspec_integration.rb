@@ -36,13 +36,13 @@ RSpec.configure do |config|
   config.include TestConstruct::Helpers
   config.include TestConstruct::RSpecIntegration
 
-  config.before :each do |example|
+  config.before :each do
     next unless test_construct_enabled?(example)
     options = test_construct_options(example)
     example.metadata[:construct] = setup_construct(options)
   end
 
-  config.after :each do |example|
+  config.after :each do
     next unless test_construct_enabled?(example)
     options = test_construct_options(example)
     teardown_construct(
