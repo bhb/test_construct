@@ -4,6 +4,7 @@ class TestConstructTest < Minitest::Test
   include TestConstruct::Helpers
 
   def teardown
+    Dir.chdir File.expand_path("../..", __FILE__)
     TestConstruct.destroy_all!
   end
 
@@ -464,7 +465,6 @@ Contents
   end
 
   testing "#destroy!" do
-
     test "removes the construct container" do
       it = create_construct
       it.destroy!
@@ -472,4 +472,70 @@ Contents
     end
   end
 
+  testing "#finalize" do
+    test "removes the construct container" do
+      it = create_construct
+      it.finalize
+      assert !File.exist?(it.to_s)
+    end
+
+    test "leaves the container if keep is flagged" do
+      it = create_construct
+      it.keep
+      it.finalize
+      assert File.exist?(it.to_s)
+    end
+
+    test "leaves the container if keep is flagged in a subdir" do
+      it = create_construct
+      subdir = it.directory "subdir"
+      subdir.keep
+      it.finalize
+      assert File.exist?(it.to_s)
+    end
+  end
+
+  testing "keep_on_error = true" do
+    test 'keeps dir when block raises exception' do
+      path = nil
+      begin
+        within_construct(keep_on_error: true) do |container_path|
+          path = container_path
+          raise 'something bad happens here'
+        end
+      rescue
+      end
+      assert path.exist?
+    end
+
+    test 'updates exception message to include location of files' do
+      path = nil
+      begin
+        within_construct(keep_on_error: true) do |container_path|
+          path = container_path
+          raise 'bad stuff'
+        end
+      rescue => e
+        error = e
+      end
+      assert_equal "bad stuff\nTestConstruct files kept at: #{path}", e.message
+    end
+  end
+
+  testing 'base_dir option' do
+    test 'determines the location of construct dirs' do
+      base_dir = File.expand_path("../temp", __FILE__)
+      within_construct(base_dir: base_dir) do |container|
+        assert_equal base_dir, container.dirname.to_s
+      end
+    end
+  end
+
+  testing 'name option' do
+    test 'used in generation of the directory name' do
+      within_construct(name: "My best test ever!") do |container|
+        assert_match /my-best-test-ever-$/, container.basename.to_s
+      end
+    end
+  end
 end
