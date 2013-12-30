@@ -11,9 +11,8 @@ module TestConstruct
       yield(container)
     rescue Exception => error
       raise unless container
-      teardown_construct(container, error, opts) do |container, error|
-        raise error
-      end
+      teardown_construct(container, error, opts)
+      raise error
     else
       teardown_construct(container, nil, opts)
     end
@@ -61,7 +60,6 @@ module TestConstruct
         container.annotate_exception!(error)
       end
       container.finalize
-      yield(container, error) if block_given?
     end
   end
 
