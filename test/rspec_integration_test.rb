@@ -4,11 +4,13 @@ def unindent(s)
   s.gsub(/^#{s.scan(/^[ \t]+(?=\S)/).min}/, '')
 end
 
+# Test harness for test_construct rspec integration
+#
 class RspecIntegrationTest < Minitest::Test
   include TestConstruct::Helpers
 
   def teardown
-    Dir.chdir File.expand_path("../..", __FILE__)
+    Dir.chdir File.expand_path('../..', __FILE__)
     TestConstruct.destroy_all!
   end
 
@@ -19,7 +21,7 @@ class RspecIntegrationTest < Minitest::Test
         spec_file_name = 'test_construct_spec.rb'
         construct.file(spec_file_name, unindent(<<-RSPEC))
           require 'test_construct/rspec_integration'
-            
+
           describe 'test_construct', test_construct: true do
             it 'should execute a test that always passes' do
               expect(1).to eq(1)
