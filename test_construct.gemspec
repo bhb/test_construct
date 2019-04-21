@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["ben@bbrinck.com", "avdi@avdi.org"]
   spec.description   = %q{Creates temporary files and directories for testing.}
   spec.summary       = %q{Creates temporary files and directories for testing.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/bhb/test_construct"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
