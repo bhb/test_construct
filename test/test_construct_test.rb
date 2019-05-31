@@ -103,7 +103,7 @@ class TestConstructTest < Minitest::Test
     test 'exists while in construct block' do
       within_construct do |construct|
         construct.file('foo.txt')
-        assert File.exists?(construct + 'foo.txt')
+        assert File.exist?(construct + 'foo.txt')
       end
     end
 
@@ -112,7 +112,7 @@ class TestConstructTest < Minitest::Test
       within_construct do |construct|
         filepath = construct.file('foo.txt')
       end
-      assert !File.exists?(filepath)
+      assert !File.exist?(filepath)
     end
 
     test 'has empty file contents by default' do
@@ -306,7 +306,6 @@ Contents
 
     test 'overrides construct default' do
       within_construct(:chdir => false) do |construct|
-        old_pwd = Dir.pwd
         construct.directory('foo', :chdir => true) do |dir|
           assert_equal dir.to_s, Dir.pwd
         end
@@ -357,7 +356,7 @@ Contents
       within_construct do |construct|
         construct.directory('bar')  do |dir|
           dir.file('foo.txt')
-          assert File.exists?('foo.txt')
+          assert File.exist?('foo.txt')
         end
       end
     end
@@ -418,7 +417,7 @@ Contents
     test 'checking for a file is relative to container' do
       within_construct do |construct|
         construct.file('foo.txt')
-        assert File.exists?('foo.txt')
+        assert File.exist?('foo.txt')
       end
     end
 
@@ -518,7 +517,7 @@ Contents
       rescue => e
         error = e
       end
-      assert_equal "bad stuff\nTestConstruct files kept at: #{path}", e.message
+      assert_equal "bad stuff\nTestConstruct files kept at: #{path}", error.message
     end
   end
 
@@ -534,7 +533,7 @@ Contents
   testing 'name option' do
     test 'used in generation of the directory name' do
       within_construct(name: "My best test ever!") do |container|
-        assert_match /my-best-test-ever-$/, container.basename.to_s
+        assert_match(/my-best-test-ever-$/, container.basename.to_s)
       end
     end
   end

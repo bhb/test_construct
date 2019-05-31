@@ -14,7 +14,7 @@ class Minitest::Test
 
   def self.test(name, &block)
     name = name.strip.gsub(/\s\s+/, " ")
-    group = "#{@group}: " if @group
+    group = "#{@group}: " if defined? @group
     test_name = "test_: #{group}#{name}".to_sym
     defined = instance_methods.include? test_name
     raise "#{test_name} is already defined in #{self}" if defined
