@@ -306,7 +306,6 @@ Contents
 
     test 'overrides construct default' do
       within_construct(:chdir => false) do |construct|
-        old_pwd = Dir.pwd
         construct.directory('foo', :chdir => true) do |dir|
           assert_equal dir.to_s, Dir.pwd
         end
@@ -518,7 +517,7 @@ Contents
       rescue => e
         error = e
       end
-      assert_equal "bad stuff\nTestConstruct files kept at: #{path}", e.message
+      assert_equal "bad stuff\nTestConstruct files kept at: #{path}", error.message
     end
   end
 
@@ -534,7 +533,7 @@ Contents
   testing 'name option' do
     test 'used in generation of the directory name' do
       within_construct(name: "My best test ever!") do |container|
-        assert_match /my-best-test-ever-$/, container.basename.to_s
+        assert_match(/my-best-test-ever-$/, container.basename.to_s)
       end
     end
   end
