@@ -1,5 +1,9 @@
 # TestConstruct Changelog
 
+## v2.0.2
+
+* Fixes line endings on Windows (@MSP-Greg)
+
 ## v2.0.1
 
 * Adds support for RSpec 3 (@jcouball)
