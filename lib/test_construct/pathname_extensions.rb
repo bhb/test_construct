@@ -17,7 +17,8 @@ module TestConstruct
     def file(filepath, contents = nil, &block)
       path = (self+filepath)
       path.dirname.mkpath
-      File.open(path,'w') do |f|
+      mode = RUBY_PLATFORM =~ /mingw|mswin/ ? 'wb:UTF-8' : 'w'
+      File.open(path, mode) do |f|
         if(block)
           if(block.arity==1)
             block.call(f)
