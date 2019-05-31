@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/test_construct.svg)](https://badge.fury.io/rb/test_construct)
+
 # TestConstruct
 
 > "This is the construct. It's our loading program. We can load anything, from clothing to equipment, weapons, and training simulations, anything we need" -- Morpheus
@@ -126,7 +128,7 @@ If you disable, automatic chdir, note that your old assertions will not work:
 ```
 within_construct(:chdir => false) do |construct|
   construct.file("foo.txt")
-  # Fails. foo.txt was created in construct, but 
+  # Fails. foo.txt was created in construct, but
   # the current directory is not the construct!
   assert File.exists?("foo.txt")
 end
