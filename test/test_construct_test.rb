@@ -103,7 +103,7 @@ class TestConstructTest < Minitest::Test
     test 'exists while in construct block' do
       within_construct do |construct|
         construct.file('foo.txt')
-        assert File.exists?(construct + 'foo.txt')
+        assert File.exist?(construct + 'foo.txt')
       end
     end
 
@@ -112,7 +112,7 @@ class TestConstructTest < Minitest::Test
       within_construct do |construct|
         filepath = construct.file('foo.txt')
       end
-      assert !File.exists?(filepath)
+      assert !File.exist?(filepath)
     end
 
     test 'has empty file contents by default' do
@@ -357,7 +357,7 @@ Contents
       within_construct do |construct|
         construct.directory('bar')  do |dir|
           dir.file('foo.txt')
-          assert File.exists?('foo.txt')
+          assert File.exist?('foo.txt')
         end
       end
     end
@@ -418,7 +418,7 @@ Contents
     test 'checking for a file is relative to container' do
       within_construct do |construct|
         construct.file('foo.txt')
-        assert File.exists?('foo.txt')
+        assert File.exist?('foo.txt')
       end
     end
 
