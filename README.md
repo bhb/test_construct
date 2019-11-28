@@ -135,7 +135,7 @@ within_construct do |construct|
 end
 ```
 
-Please read test/construct_test.rb for more examples.
+Please read [test/construct_test.rb](test/construct_test.rb) for more examples.
 
 ### Disabling chdir
 
