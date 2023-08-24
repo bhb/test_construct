@@ -1,7 +1,7 @@
 require 'minitest'
 require "minitest/autorun"
 
-require 'mocha/setup'
+require 'mocha/minitest'
 require 'test_construct'
 
 class Minitest::Test
